@@ -84,7 +84,7 @@ const colunas = [
 
 const fakeData = [
   {
-    id: "0",
+    _id: "0",
     designation: "Tomate",
     scientific_name: "Solanum lycopersicum",
     species: "Tomate",
@@ -92,7 +92,7 @@ const fakeData = [
     description: "It's a tomato",
   },
   {
-    id: "1",
+    _id: "1",
     designation: "Alface",
     scientific_name: "Lactuca sativa",
     species: "Alface",
@@ -100,7 +100,7 @@ const fakeData = [
     description: "It's lettuce",
   },
   {
-    id: "2",
+    _id: "2",
     designation: "Alface",
     scientific_name: "Lactuca sativa",
     species: "Alface",
@@ -108,7 +108,7 @@ const fakeData = [
     description: "It's lettuce",
   },
   {
-    id: "3",
+    _id: "3",
     designation: "Alface",
     scientific_name: "Lactuca sativa",
     species: "Alface",
@@ -116,7 +116,7 @@ const fakeData = [
     description: "It's lettuce",
   },
   {
-    id: "4",
+    _id: "4",
     designation: "Alface",
     scientific_name: "Lactuca sativa",
     species: "Alface",
@@ -141,7 +141,7 @@ export default function Plants() {
       case "actions":
         return(
           <div className="flex flex-row justify-center gap-3 text-[#4D789B] px-4">
-            <button onClick={() => setPlantId(item.id)}> <FaEye size={25}/> </button>
+            <button onClick={() => setPlantId(item._id)}> <FaEye size={25}/> </button>
             <button> <MdModeEdit size={25}/> </button>
             <button> <FaRegTrashAlt size={25}/> </button>
           </div>
