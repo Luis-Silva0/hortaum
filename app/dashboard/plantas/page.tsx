@@ -9,16 +9,13 @@ import {
   TableCell,
   getKeyValue,
   SortDescriptor,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
+  Button,
+  Input
 } from "@nextui-org/react"
 import { useState, useMemo } from "react";
-import { FaRegTrashAlt, FaEye } from "react-icons/fa";
+import { FaRegTrashAlt, FaEye, FaPlus } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
+import { PiMagnifyingGlassBold } from "react-icons/pi";
 
 const columns = [
   {
@@ -134,58 +131,89 @@ const data = [{
 
 export default function Plants() {
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({column: "name", direction:"ascending"});
+  const [search, setSearch] = useState("");
 
   const renderCell = (item: any, columnKey: any) => {
 
     switch(columnKey) {
       case "actions":
         return(
-          <div className="flex flex-row justify-center gap-3 text-[#4D789B]">
-            <button> <FaEye/> </button>
-            <button> <MdModeEdit/> </button>
-            <button> <FaRegTrashAlt/> </button>
+          <div className="flex flex-row justify-center gap-3 text-[#4D789B] px-4">
+            <button> <FaEye size={25}/> </button>
+            <button> <MdModeEdit size={25}/> </button>
+            <button> <FaRegTrashAlt size={25}/> </button>
           </div>
         )
 
       default:
         return(
           <>
-            <div className="relative flex items-center gap-2 py-4 text-[#4D789B] indent-4"> 
+            <div className="relative flex items-center gap-2 py-4 text-[#4D789B] px-4 text-wrap"> 
               {getKeyValue(item,columnKey)}
             </div>
           </>
         )
     }
   }
+  const filteredItems = useMemo(() => {
+    return [...fakeData].filter((a: any) => {
+      return a.name.includes(search);
+    });
+  }, [search, fakeData]);
 
   const sortedItems = useMemo(() => {
-    console.log(sortDescriptor);
-    return [...fakeData].sort((a: any, b: any) => {
+    return [...filteredItems].sort((a: any, b: any) => {
       const first = a[sortDescriptor.column] as number;
       const second = b[sortDescriptor.column] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
-  }, [sortDescriptor, fakeData]);
+  }, [sortDescriptor, filteredItems]);
 
 
   return (
-    <div className="pt-12 flex flex-col gap-6 flex-1">
-        <div>
+    <>
+      <div className="pt-12 flex flex-col gap-6 flex-1">
+        <div className="flex flex-row">
           <h1 className="text-3xl ml-8 text-black">
             Gestão de Plantas
-        </h1>
-
+          </h1>
+          <div className="flex flex-row mr-8 gap-16 flex-1 justify-end">
+            <Input type="search" variant="bordered" size="lg" className="w-[40%] h-full" 
+            classNames={{
+              input: [
+                "rounded-none",
+                "text-black",
+                "text-md",
+                "placeholder:text-gray-500",
+                "h-full",
+                "text-xl",
+                "indent-4"
+              ],
+              innerWrapper: ["bg-transparent"],
+              inputWrapper: [
+                "!cursor-text",
+                "h-full",
+                "border-b-2",
+                "border-gray-500"
+              ],
+            }}
+            endContent={<div className="text-gray-500"> <PiMagnifyingGlassBold size={25}/> </div>}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            color="primary" placeholder="Procura ..."/>
+            <Button className="flex bg-[#2A3F54] px-8 py-6 rounded-lg"> <FaPlus size={30}/> </Button>
+          </div>
         </div>
-        <Table aria-label="Example static collection table" className="box-content w-full" classNames={{thead: ["bg-[#4D789B]"]}} sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
+        <Table aria-label="Example static collection table" className="box-content w-full" classNames={{thead: ["bg-[#4D789B]"], th: ["w-[5%]"]}} sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
           <TableHeader columns={columns}>
             {(column) => (
-            <TableColumn key={column.key} align={column.key === "actions" ? "center" : "start"} className="whitespace-nowrap px-4">{column.label}</TableColumn>
+            <TableColumn key={column.key} align={column.key == "actions" ? "center" : "start"} className={column.key == "actions" ? "" : "indent-4"} maxWidth={15}>{column.label}</TableColumn>
           )}
           </TableHeader>
           <TableBody emptyContent={"No data selected"} items={sortedItems}>
-            {(item: any) => ( // TODO: Fix this any by checking documentation of TableBody
+            {(item: any) => (
               <TableRow key={item.id} className="odd:bg-gray-100 even:bg-white">
                 {(columnKey) => (
                   <TableCell>{renderCell(item,columnKey)}</TableCell>
@@ -194,6 +222,7 @@ export default function Plants() {
             )}
           </TableBody> 
         </Table>
-    </div>
+      </div>
+    </>
   );
 }
