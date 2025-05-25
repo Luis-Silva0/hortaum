@@ -217,7 +217,7 @@ export default function Plants() {
             </TableHeader>
             <TableBody emptyContent={"No data selected"} items={sortedItems}>
               {(item: any) => (
-                <TableRow key={item.id} className="odd:bg-gray-100 even:bg-white">
+                <TableRow key={item._id} className="odd:bg-gray-100 even:bg-white">
                   {(columnKey) => (
                     <TableCell>{renderCell(item,columnKey)}</TableCell>
                   )}
