@@ -48,8 +48,6 @@ export async function POST(request: NextRequest){
             httpOnly: true,
         })
 
-        console.log("Yay", Object.keys(user.toObject()))
-
         return response;
 
     } catch (error: any) {
