@@ -9,17 +9,25 @@ import {
   TableCell,
   getKeyValue,
   SortDescriptor,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Button,
+  useDisclosure,
   Input
-} from "@nextui-org/react";
-import { useState, useMemo } from "react";
+} from "@heroui/react";
+import { useState, useMemo, useEffect } from "react";
 import { FaRegTrashAlt, FaEye, FaPlus } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
 import { PiMagnifyingGlassBold } from "react-icons/pi";
 import AtributeList from "@/components/AtributeList";
-import dbConnect from "@/lib/mongodb"; // base de dados
+import AddPlantForm from "@/components/addPlantForm";
+import axios from "axios";
 
 const columns = [
+  { key: "id", label: "Id", allowsSorting: true},
   { key: "designation", label: "Designação", allowsSorting: true },
   { key:"scientific_name", label:"Nome Científico", allowsSorting: true },
   { key:"n_specimens", label:"Nº Exemplares", allowsSorting: true },
@@ -29,11 +37,11 @@ const columns = [
 ];
 
 const initialFakeData = [
-  { _id: "0", designation: "Tomate", scientific_name: "Solanum lycopersicum", species: "Tomate", n_specimens: 10, description: "It's a tomato" },
-  { _id: "1", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 15, description: "It's lettuce" },
-  { _id: "2", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 5, description: "It's lettuce" },
-  { _id: "3", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 2, description: "It's lettuce" },
-  { _id: "4", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 25, description: "It's lettuce" },
+  { id: "0", designation: "Tomate", scientific_name: "Solanum lycopersicum", species: "Tomate", n_specimens: 10, description: "It's a tomato" },
+  { id: "1", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 15, description: "It's lettuce" },
+  { id: "2", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 5, description: "It's lettuce" },
+  { id: "3", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 2, description: "It's lettuce" },
+  { id: "4", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 25, description: "It's lettuce" },
 ];
 
 // Adicionar ID para cada familia, para identificar cada uma, familia "Lactuca sativa" id = 0
@@ -43,9 +51,17 @@ export default function Plants() {
   const [search, setSearch] = useState("");
   const [plantId, setPlantId] = useState<string>("");
   const [data, setData] = useState(initialFakeData);
+  const [loading, setLoading] = useState(false);
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
-  const deletePlant = (id: string) => {
-    setData(prev => prev.filter(item => item._id !== id));
+  const deletePlant = async (pId: number) => {
+      try {
+            const response = await axios.delete("/api/plants", {data: {id: pId}});
+            getPlants();
+            
+        } catch (error:any) {
+            console.log("Failed to delete plant", error.response.data.error);   
+        }
   }
 
   const renderCell = (item: any, columnKey: any) => {
@@ -53,11 +69,12 @@ export default function Plants() {
       case "actions":
         return (
           <div className="flex flex-row justify-center gap-3 text-[#4D789B] px-4">
-            <button onClick={() => setPlantId(item._id)}> <FaEye size={25}/> </button>
+            <button onClick={() => setPlantId(item.id)}> <FaEye size={25}/> </button>
             <button> <MdModeEdit size={25}/> </button>
-            <button
-              onClick={() => deletePlant(item._id)}> 
-              <FaRegTrashAlt size={25}/>
+            <button> <FaRegTrashAlt size={25}
+            onClick={() => deletePlant(item.id)} 
+            />
+            
             </button>
           </div>
         );
@@ -83,6 +100,24 @@ export default function Plants() {
     });
   }, [sortDescriptor, filteredItems]);
 
+  const getPlants = async () => {
+      try {
+            setLoading(true);
+            const response = await axios.get("/api/plants/all");
+            setData(response.data.plants);
+            
+        } catch (error:any) {
+            console.log("Failed to get plants", error.response.data.error);
+            
+        } finally {
+            setLoading(false);
+        }
+  }
+
+  useEffect(() => {
+    getPlants();
+  }, []);
+
   return (
     <>
       {plantId === "" ? (
@@ -92,61 +127,39 @@ export default function Plants() {
             <div className="flex gap-4 items-center">
               <Input
                 type="search"
-                variant="bordered"
+                variant="underlined"
                 size="lg"
-                className="w-[300px] text-black"
+                className="w-[25vw] text-black"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Procura..."
                 classNames={{
-                  input: ["rounded-none", "text-black", "text-md", "placeholder:text-gray-500", "h-full", "text-xl", "indent-4"],
+                  input: ["rounded-none", "text-md", "h-full", "text-xl", "indent-4", "!text-gray-500"],
                   innerWrapper: ["bg-transparent"],
-                  inputWrapper: ["!cursor-text", "h-full", "border-b-2", "border-gray-500"]
+                  inputWrapper: ["h-full", "border-b-2", "border-gray-500"],
                 }}
               />
-              <div className="flex items-center">
-                <PiMagnifyingGlassBold size={25} className="text-gray-600" />
-              </div>
-              <button
-                className="flex bg-[#19684a] px-4 py-4 rounded-lg"
-                onClick={() => {
-                  const designation = prompt("Designação (obrigatório):");
-                  if (!designation) return;
-                  const scientific_name = prompt("Nome Científico (obrigatório):");
-                  if (!scientific_name) return;
-                  const species = prompt("Espécie (opcional):") || "";
-                  const n_specimens = Number(prompt("Nº Exemplares (opcional):") || 0);
-                  const description = prompt("Descrição (opcional):") || "";
-
-                  // If opcional meter o valor NaN
-
-                  setData(prev => [
-                    ...prev,
-                    {
-                      _id: String(prev.length),
-                      designation,
-                      scientific_name,
-                      species,
-                      n_specimens,
-                      description,
-                    }
-                  ]);
-                }}
+              <Button
+                className="flex bg-[#19684a] rounded-lg text-white"
+                size="lg"
+                onPress={onOpen}
               >  <FaPlus size={25}/>
-              </button>
+              </Button>
             </div>
           </div>
-
           <Table
             aria-label="Example static collection table"
-            className="box-content w-full"
-            classNames={{ thead: ["bg-[#4D789B]"], th: ["w-[5%]"] }}
+            className="box-content"
+            classNames={{thead: [""], th: ["w-[5%]", "bg-[#4D789B]", "text-white", "text-md"], tr: ["text-md"]}}
             sortDescriptor={sortDescriptor}
             onSortChange={setSortDescriptor}
+            removeWrapper
+            isStriped
           >
             <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn
+                  allowsSorting={column.allowsSorting}
                   key={column.key}
                   align={column.key === "actions" ? "center" : "start"}
                   className={column.key === "actions" ? "" : "indent-4"}
@@ -157,7 +170,7 @@ export default function Plants() {
             </TableHeader>
             <TableBody emptyContent={"No data selected"} items={sortedItems}>
               {(item) => (
-                <TableRow key={item._id} className="odd:bg-gray-100 even:bg-white">
+                <TableRow key={item.id} className="odd:bg-gray-100 even:bg-white">
                   {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                 </TableRow>
               )}
@@ -167,6 +180,18 @@ export default function Plants() {
       ) : (
         <AtributeList id={plantId}/>
       )}
+      <Modal isOpen={isOpen} size="5xl" onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-black">Adicionar Planta</ModalHeader>
+              <ModalBody>
+                <AddPlantForm close={onClose} reload={getPlants}/>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }

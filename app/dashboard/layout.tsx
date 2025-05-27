@@ -7,9 +7,9 @@ export const metadata = {
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row w-full">
         <Sidebar />
-        <div className="flex flex-col bg-[#F7F7F7]">
+        <div className="flex flex-col bg-[#F7F7F7] w-[90vw] h-screen">
             <Header />
             {children}
         </div>
