@@ -183,7 +183,7 @@ export default function Plants() {
               Gestão de Plantas
             </h1>
             <div className="flex flex-row mr-8 gap-16 flex-1 justify-end">
-              <Input type="search" variant="bordered" size="lg" className="w-[40%] h-full" 
+              <Input type="search" variant="bordered" size="lg" className="w-[50%]" 
               classNames={{
                 input: [
                   "rounded-none",
@@ -197,12 +197,15 @@ export default function Plants() {
                 innerWrapper: ["bg-transparent"],
                 inputWrapper: [
                   "!cursor-text",
-                  "h-full",
+                  "flex",
                   "border-b-2",
                   "border-gray-500"
                 ],
+                mainWrapper: [
+                  "flex",
+                  "flex-row",
+                ]
               }}
-              endContent={<div className="text-gray-500"> <PiMagnifyingGlassBold size={25}/> </div>}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               color="primary" placeholder="Procura ..."/>

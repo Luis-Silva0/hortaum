@@ -1,11 +1,13 @@
 "use client"
-
+  	
+import dbConnect from "@/lib/mongodb";
 import { useState } from "react"
 import { useRouter } from "next/navigation";
 import { Input } from "@nextui-org/react";
 import axios from "axios"
 
 export default function Dashboard() {
+  //dbConnect();
   const [formData, setFormData] = useState<{username: string, password:string}>({username: "", password: ""});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

@@ -21,8 +21,17 @@ async function dbConnect() {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGODB_URI,{
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000,  // increase timeout
+      socketTimeoutMS: 45000,          // optional
+      ssl: true,
+    }).then((mongoose) => {
       return mongoose;
+    }).catch((error) => {
+      console.error('MongoDB connection error:', error);
+      throw new Error('Failed to connect to MongoDB');
     });
   }
   cached.conn = await cached.promise;
