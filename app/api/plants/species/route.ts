@@ -7,14 +7,13 @@ dbConnect()
 
 export async function GET(request: NextRequest){
     try {
-
         //check if user exists
-        const plants = await Plant.find({}).select({"_id":0,"id":1,"designation":1, "description":1, "species":1, "n_specimens":1, "scientific_name":1})
+        const species = await Plant.find({}).select({"species":1, "_id": 0})
 
-        return NextResponse.json({response: "Success", plants: plants});
+        return NextResponse.json({response: "Success", species: species});
 
     } catch (error: any) {
-        return NextResponse.json({error: error.message}, {status: 500})
+        return NextResponse.json({error: error.message}, {status: 500});
 
     }
 }
