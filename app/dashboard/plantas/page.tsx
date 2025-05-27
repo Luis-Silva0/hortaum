@@ -17,6 +17,7 @@ import { FaRegTrashAlt, FaEye, FaPlus } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
 import { PiMagnifyingGlassBold } from "react-icons/pi";
 import AtributeList from "@/components/AtributeList";
+import dbConnect from "@/lib/mongodb"; // base de dados
 
 const columns = [
   { key: "designation", label: "Designação", allowsSorting: true },
@@ -43,6 +44,10 @@ export default function Plants() {
   const [plantId, setPlantId] = useState<string>("");
   const [data, setData] = useState(initialFakeData);
 
+  const deletePlant = (id: string) => {
+    setData(prev => prev.filter(item => item._id !== id));
+  }
+
   const renderCell = (item: any, columnKey: any) => {
     switch(columnKey) {
       case "actions":
@@ -50,12 +55,9 @@ export default function Plants() {
           <div className="flex flex-row justify-center gap-3 text-[#4D789B] px-4">
             <button onClick={() => setPlantId(item._id)}> <FaEye size={25}/> </button>
             <button> <MdModeEdit size={25}/> </button>
-            <button> <FaRegTrashAlt size={25}
-            //onClick={() => 
-              // Apagar a planta
-            //}
-            />
-            
+            <button
+              onClick={() => deletePlant(item._id)}> 
+              <FaRegTrashAlt size={25}/>
             </button>
           </div>
         );
@@ -101,8 +103,10 @@ export default function Plants() {
                   innerWrapper: ["bg-transparent"],
                   inputWrapper: ["!cursor-text", "h-full", "border-b-2", "border-gray-500"]
                 }}
-                endContent={<PiMagnifyingGlassBold size={25} />}
               />
+              <div className="flex items-center">
+                <PiMagnifyingGlassBold size={25} className="text-gray-600" />
+              </div>
               <button
                 className="flex bg-[#19684a] px-4 py-4 rounded-lg"
                 onClick={() => {

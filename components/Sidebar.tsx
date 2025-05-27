@@ -36,7 +36,7 @@ export default function Sidebar () {
                 {/* Main dashboard */}
                 <div className="flex flex-row items-end gap-4">
                     <RiHome5Line size={30}/> 
-                    <Link className="text-lg" href={"/dashboard"}> Dashboard </Link>
+                    <Link className="text-lg" href={"/dashboard"}> Home </Link>
                 </div>
 
                 {/* Plant list */}
