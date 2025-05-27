@@ -66,7 +66,7 @@ export default function Home() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg pb-5 text-black font-semibold">Produção Mensal (kg)</CardTitle>
+              <CardTitle className="text-lg pb-5 text-black font-semibold items-center">Produção Mensal (kg)</CardTitle>
             </CardHeader>
             <CardContent>
               <ProduçãoMensalChart/>
