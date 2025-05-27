@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ProduçãoMensalChart } from "./charts/ProduçãoMensalChart"
 
 export default function Home() {
   return (
@@ -65,12 +66,10 @@ export default function Home() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg text-black font-semibold">Produção Mensal (kg)</CardTitle>
+              <CardTitle className="text-lg pb-5 text-black font-semibold">Produção Mensal (kg)</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-32 bg-muted rounded-md flex items-center justify-center">
-                <p className="text-black">Gráfico de produção</p>
-              </div>
+              <ProduçãoMensalChart/>
             </CardContent>
           </Card>
         </div>
