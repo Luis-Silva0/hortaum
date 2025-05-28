@@ -66,7 +66,7 @@ export default function AddPlantForm (props: any) {
                     placeholder="Ex: Salsa"
                     type="text"
                     value={formData.designation}
-                    onChange={(e) => setFormData({...formData, designation: e.target.value})}
+                    onChange={(e: any) => setFormData({...formData, designation: e.target.value})}
                     variant="bordered"
                     classNames={{label: "!text-[#2A3F54]"}}
                 />
@@ -79,7 +79,7 @@ export default function AddPlantForm (props: any) {
                     placeholder="Ex: Petroselinum crispum"
                     type="text"
                     value={formData.scientific_name}
-                    onChange={(e) => setFormData({...formData, scientific_name: e.target.value})}
+                    onChange={(e: any) => setFormData({...formData, scientific_name: e.target.value})}
                     variant="bordered"
                     classNames={{label: "!text-[#2A3F54]"}}
                 />
@@ -92,7 +92,7 @@ export default function AddPlantForm (props: any) {
                             placeholder="Ex: P. crispum"
                             type="text"
                             value={formData.species}
-                            onChange={(e) => setFormData({...formData, species: e.target.value})}
+                            onChange={(e: any) => setFormData({...formData, species: e.target.value})}
                             variant="bordered"
                             classNames={{label: "!text-[#2A3F54]"}}
                         />
@@ -121,7 +121,7 @@ export default function AddPlantForm (props: any) {
                             variant="bordered"
                             classNames={{label: "!text-[#2A3F54]", listbox: "text-black", trigger: "text-black"}}
                         > 
-                            {(species) => <SelectItem key={species.id} textValue={species.label}> {species.label} </SelectItem>}
+                            {(species: {id: string, label: string}) => <SelectItem key={species.id} textValue={species.label}> {species.label} </SelectItem>}
                         </Select>
                         <Button 
                             variant="bordered"
@@ -139,7 +139,7 @@ export default function AddPlantForm (props: any) {
                     placeholder="Ex: 10"
                     type="number"
                     value={formData.n_specimens.toString()}
-                    onChange={(e) => setFormData({...formData, n_specimens: e.target.valueAsNumber})}
+                    onChange={(e: any) => setFormData({...formData, n_specimens: e.target.valueAsNumber})}
                     variant="bordered"
                     classNames={{label: "!text-[#2A3F54]"}}
                 />
@@ -150,7 +150,7 @@ export default function AddPlantForm (props: any) {
                     placeholder="Ex: É uma planta bienal que, no primeiro ano..."
                     type="text"
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={(e: any) => setFormData({...formData, description: e.target.value})}
                     variant="bordered"
                     classNames={{label: "!text-[#2A3F54]"}}
                 />

@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@heroui/react": "^2.7.8",
-    "@nextui-org/react": "^2.6.11",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-progress": "^1.1.7",

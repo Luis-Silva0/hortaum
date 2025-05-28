@@ -1,12 +1,9 @@
 "use client"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import CurrentConditionsCard from "@/components/CurrentConditionsCard"
-import { ProduçãoMensalChart } from "./charts/ProduçãoMensalChart"
-import { Db, OrderedBulkOperation } from "mongodb"
-import clientPromise from "@/lib/mongodb"
-import { FiEdit } from 'react-icons/fi'
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Card, CardBody, CardHeader } from "@heroui/react";
+import CurrentConditionsCard from "@/components/CurrentConditionsCard";
+import { ProduçãoMensalChart } from "./charts/ProduçãoMensalChart";
+import { useEffect, useState } from "react";
+import axios from "axios";
 /*
 async function getQuantity(createdAfter: Date | null, createdBefore: Date | null) {
   const client = await clientPromise
@@ -55,21 +52,34 @@ async function getQuantity(createdAfter: Date | null, createdBefore: Date | null
 
 export default function Home() {
 
-  const [areaTotal, setAreaTotal] = useState(0)
-  const [canteirosDisponiveis, setCanteirosDisponiveis] = useState(0)
-  const [voluntariosAtivos, setVoluntariosAtivos] = useState(0)
+  const [numeroTotal, setNumeroTotal] = useState(0);
+  const [speciesNumber, setSpeciesNumber] = useState(0);
 
-  const [editingArea, setEditingArea] = useState(false)
-  const [editingVoluntarios, setEditingVoluntarios] = useState(false)
-
-  const handleSaveArea = (newValue: number) => {
-    setAreaTotal(newValue)
-    setCanteirosDisponiveis(Math.floor(newValue / 10))
+  const getPlantNumber = async () => {
+    try {
+          const response = await axios.get("/api/plants/total");
+          setNumeroTotal(response.data.number);
+            
+      } catch (error:any) {
+          console.log("Failed to get plant number", error.response.data.error);   
+      }
   }
 
-  const handleSaveVoluntarios = (newValue: number) => {
-    setVoluntariosAtivos(newValue)
+  const getSpeciesNumber = async () => {
+    try {
+          const response = await axios.get("/api/plants/species");
+          setSpeciesNumber(response.data.species.length);
+          
+      } catch (error:any) {
+          console.log("Couldn't get plant species", error);
+          
+      }
   }
+
+  useEffect(() => {
+    getPlantNumber();
+    getSpeciesNumber()
+  }, []);
 
   return (
     <div className="pt-8">
@@ -82,70 +92,29 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-black">ÁREA TOTAL</CardTitle>
+              <div className="text-sm font-medium text-black">NÚMERO TOTAL DE PLANTAS</div>
             </CardHeader>
-            <CardContent>
-                <div className="text-2xl text-black font-bold">{areaTotal} m²</div>
-            <p className="text-xs text-black">{canteirosDisponiveis} canteiros disponíveis</p>
-            <div>
-            <Button
-              variant="ghost"
-              size="lg"
-              className="p-0 h-auto text-base font-bold flex items-center text-black"
-              onClick={() => setEditingArea(true)}
-            >
-                <FiEdit /> Editar
-            </Button>
-            </div>
-            </CardContent>
+            <CardBody>
+                <div className="text-2xl text-black font-bold">{numeroTotal} </div>
+            </CardBody>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-black">VOLUNTÁRIOS ATIVOS</CardTitle>
+              <div className="text-sm font-medium text-black">ESPÉCIES CULTIVADAS</div>
             </CardHeader>
-            <CardContent>
-                <div className="text-2xl text-black font-bold">{voluntariosAtivos}</div>
-            <p className="text-xs text-black">{canteirosDisponiveis} Desde o último mês</p>
-            <div>
-            <Button
-              variant="ghost"
-              size="lg"
-              className="p-0 h-auto text-base font-bold flex items-center text-black"
-              onClick={() => setEditingArea(true)}
-            >
-                <FiEdit /> Editar
-            </Button>
-            </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-black">ESPÉCIES CULTIVADAS</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl text-black font-bold">0</div>
+            <CardBody>
+              <div className="text-2xl text-black font-bold pb-2">{speciesNumber}</div>
               <p className="text-xs text-black">Desde o último mês</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-black">PRODUÇÃO TOTAL</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl text-black font-bold">0 kg</div>
-              <p className="text-xs text-black">Neste ano</p>
-            </CardContent>
+            </CardBody>
           </Card>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg text-black font-semibold">Condições Atuais</CardTitle>
+              <div className="text-lg text-black font-semibold">Condições Atuais</div>
             </CardHeader>
-            <CardContent className="space-y-4 mt-10">
+            <CardBody className="space-y-4 mt-10">
               <div className="h-32 rounded-md">
                 <CurrentConditionsCard
                 temperature="24°C" // getTemp()
@@ -154,14 +123,14 @@ export default function Home() {
                 nextEvent="Amanhã, 14:00" // getEvent() ?                 
                 /> 
               </div>
-            </CardContent>
+            </CardBody>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg pb-5 text-black font-semibold items-center">Produção Mensal</CardTitle>
+              <div className="text-lg pb-5 text-black font-semibold items-center">Produção Mensal</div>
             </CardHeader>
-            <CardContent>
+            <CardBody>
               <ProduçãoMensalChart data={[
                 { month: "Jan", quantity: 12 },
                 { month: "Fev", quantity: 10 },
@@ -175,7 +144,7 @@ export default function Home() {
                 { month: "Out", quantity: 22 },
                 { month: "Nov", quantity: 23 },
                 { month: "Dez", quantity: 21 }]}/>
-            </CardContent>
+            </CardBody>
           </Card>
         </div>
       </div>

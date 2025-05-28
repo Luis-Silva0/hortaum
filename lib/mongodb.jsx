@@ -22,8 +22,6 @@ async function dbConnect() {
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI,{
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverSelectionTimeoutMS: 30000,  // increase timeout
       socketTimeoutMS: 45000,          // optional
       ssl: true,

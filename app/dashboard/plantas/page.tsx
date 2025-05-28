@@ -17,7 +17,7 @@ import {
   Button,
   useDisclosure,
   Input
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useState, useMemo, useEffect } from "react";
 import { FaRegTrashAlt, FaEye, FaPlus } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
@@ -69,7 +69,7 @@ export default function Plants() {
       case "actions":
         return (
           <div className="flex flex-row justify-center gap-3 text-[#4D789B] px-4">
-            <button onClick={() => setPlantId(item.id)}> <FaEye size={25}/> </button>
+            <button onClick={() => setPlantId(item._id)}> <FaEye size={25}/> </button>
             <button> <MdModeEdit size={25}/> </button>
             <button> <FaRegTrashAlt size={25}
             onClick={() => deletePlant(item.id)} 

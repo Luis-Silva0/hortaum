@@ -4,8 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button, Input } from "@heroui/react"
 import { Plus, Minus } from "lucide-react"
 
 interface EditCardProps {
@@ -50,14 +49,14 @@ export default function EditCard({ title, currentValue, unit = "", isOpen, onClo
         </DialogHeader>
         <div className="py-4">
           <div className="flex items-center justify-center space-x-4">
-            <Button variant="outline" size="icon" onClick={handleDecrement} className="h-10 w-10 rounded-full">
+            <Button variant="bordered" size="icon" onClick={handleDecrement} className="h-10 w-10 rounded-full">
               <Minus className="h-4 w-4" />
             </Button>
             <div className="flex items-center">
-              <Input type="text" value={value} onChange={handleChange} className="w-24 text-center text-lg font-bold" />
+              <Input type="text" value={value.toString()} onChange={handleChange} className="w-24 text-center text-lg font-bold" />
               {unit && <span className="ml-2 text-lg font-medium">{unit}</span>}
             </div>
-            <Button variant="outline" size="icon" onClick={handleIncrement} className="h-10 w-10 rounded-full">
+            <Button variant="bordered" size="icon" onClick={handleIncrement} className="h-10 w-10 rounded-full">
               <Plus className="h-4 w-4" />
             </Button>
           </div>

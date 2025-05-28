@@ -23,7 +23,7 @@ export default function Sidebar () {
     }
 
     return(
-        <div className="bg-[#2A3F54] h-screen w-[10vw] min-w-[200px] flex-col justify-between md:flex hidden">
+        <div className="bg-[#2A3F54] h-screen w-[10vw] min-w-[200px] flex-col justify-between md:flex hidden text-white pt-2">
             <div className="flex flex-col gap-40">
                 <div className="h-[5vh] flex items-center justify-center gap-4">
                 <PiLeafBold size={40}/>
