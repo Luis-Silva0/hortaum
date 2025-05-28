@@ -17,7 +17,7 @@ import {
   Button,
   useDisclosure,
   Input
-} from "@heroui/react";
+} from "@nextui-org/react";
 import { useState, useMemo, useEffect } from "react";
 import { FaRegTrashAlt, FaEye, FaPlus } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
