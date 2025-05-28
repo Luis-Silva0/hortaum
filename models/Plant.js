@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+
 const EventSchema = new mongoose.Schema({
   event: {
     type: String,
@@ -35,7 +37,7 @@ const PlantSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  distribution_map: {
+  /*distribution_map: {
     type: String,
     default: "",
   },
@@ -62,11 +64,11 @@ const PlantSchema = new mongoose.Schema({
   genus: {
     type: String,
     default: "",
-  },
+  },*/
   species: {
     type: String,
     default: "",
-  },
+  },/*
   distribution: {
     type: String,
     default: "",
@@ -90,12 +92,12 @@ const PlantSchema = new mongoose.Schema({
   harvest: {
     type: String,
     default: "",
-  },
+  },*/
   n_specimens: {
     type: Number,
     default: "",
   },
-  place: {
+  /*place: {
     type: String,
     default: "",
   },
@@ -134,7 +136,8 @@ const PlantSchema = new mongoose.Schema({
   events: {
     type: [EventSchema],
     default: [],
-  }
+  }*/
 });
+PlantSchema.plugin(AutoIncrement, { inc_field: 'id' });
 
 export default mongoose.models.Plant || mongoose.model('Plant', PlantSchema);
