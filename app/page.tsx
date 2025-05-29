@@ -6,6 +6,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 import { Leaf, Loader2 } from "lucide-react"
+import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -43,8 +44,8 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-green-50 to-white p-4">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="flex min-h-screen items-center justify-center" style={{backgroundImage: `url('/Foto_Horta.png')`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+      <Card className="w-full max-w-md shadow-lg bg-gradient-to-b from-green-50 to-white p-4">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-2">
             <div className="rounded-full bg-green-100 p-3">
