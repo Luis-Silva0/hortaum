@@ -23,12 +23,15 @@ export function ProduçãoMensalChart( {data} : ProduçãoMensalProps) {
                 <XAxis dataKey="month" name="Month" />
                 <YAxis dataKey="quantity" name="Quantity" tickFormatter={tick => formatQuantity(tick)}
                     />
-                <Tooltip formatter={quantity => formatQuantity(quantity as number)} />
+                <Tooltip 
+                    formatter={quantity => formatQuantity(quantity as number)} 
+                    labelFormatter={() => ''} 
+                />
                 <Line 
-                dot={true}
-                dataKey="quantity"
-                name="Quantidade de Plantas"
-                
+                    dot={true}
+                    dataKey="quantity"
+                    name="Quantidade de Plantas"
+                    stroke="#22c55e"
                 />
             </LineChart>
         </ResponsiveContainer>

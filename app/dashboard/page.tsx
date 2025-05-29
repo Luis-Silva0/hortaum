@@ -4,51 +4,6 @@ import CurrentConditionsCard from "@/components/CurrentConditionsCard";
 import { ProduçãoMensalChart } from "./charts/ProduçãoMensalChart";
 import { useEffect, useState } from "react";
 import axios from "axios";
-/*
-async function getQuantity(createdAfter: Date | null, createdBefore: Date | null) {
-  const client = await clientPromise
-  const db = client.db()
-  const orders = db.collection("order")
-
-  const createdAtQuery: Record<string, any> = {}
-  if (createdAfter) createdAtQuery["$gte"] = createdAfter
-  if (createdBefore) createdAtQuery["$lte"] = createdBefore
-
-  const [aggregateResult, chartData] = await Promise.all([
-    orders.aggregate([
-      { $match: { createdAt: createdAtQuery } },
-      { $group: { _id: null, quantityNum: { $sum: "$quantityNum" }, count: { $sum: 1 } } }
-    ]).toArray(),
-    orders.find({ createdAt: createdAtQuery }).sort({ createdAt: 1 }).toArray()
-  ])
-
-  const data = aggregateResult[0] || { quantityNum: 0, count: 0 }
-
-  const dayArray = eachDayOfInterval(interval(
-    createdAfter || startOfDay(chartData[0]?.createdAt || new Date()),
-    createdBefore || new Date()
-  )).map(day => ({
-    date: formatRevalidate(day),
-    total: 0
-  }))
-
-  const reducedChartData = chartData.reduce((data, quantity) => {
-    const formattedDate = formatRevalidate(quantity.createdAt)
-    const entry = data.find(day => day.date === formattedDate)
-    if (entry) entry.total += (quantity.quantityNum || 0) / 100
-    return data
-  }, dayArray)
-
-  return {
-    chartData: reducedChartData,
-    amount: (data.quantityNum || 0) / 100,
-    numPlants: data.count
-  }
-}
-*/
-// ver com o Luis por causa da Base de Dados
-
-
 
 export default function Home() {
 
@@ -83,11 +38,6 @@ export default function Home() {
 
   return (
     <div className="pt-8">
-      <h1 className="text-lg text-black m-4">Horta ComUM</h1>
-      <h3 className=" pl-4 text-black m-4"> Localização: Universidade do Minho, Campus de Gualtar, Braga </h3> 
-      {/* Meter um icon de localização*/}
-
-
       <div className="p-4 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>

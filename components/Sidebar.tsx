@@ -23,12 +23,12 @@ export default function Sidebar () {
     }
 
     return(
-        <div className="bg-[#2A3F54] h-screen w-[10vw] min-w-[200px] flex-col justify-between md:flex hidden text-white pt-2">
+        <div className="bg-[#22c55e] h-screen w-[10vw] min-w-[200px] flex-col justify-between md:flex hidden text-white pt-2">
             <div className="flex flex-col gap-40">
                 <div className="h-[5vh] flex items-center justify-center gap-4">
                 <PiLeafBold size={40}/>
                 <h1 className="text-xl"> 
-                    HortaUM 
+                    HortUM 
                 </h1>
             </div>
 
@@ -36,20 +36,33 @@ export default function Sidebar () {
                 {/* Main dashboard */}
                 <div className="flex flex-row items-end gap-4">
                     <RiHome5Line size={30}/> 
-                    <Link className="text-lg" href={"/dashboard"}> Home </Link>
+                    <Link
+                        className="text-lg transition-colors duration-200 hover:text-green-900"
+                        href={"/dashboard"}
+                    >
+                        Home
+                    </Link>
                 </div>
 
                 {/* Plant list */}
                 <div className="flex flex-row items-end gap-4">
                     <PiLeafBold size={30}/>
-                    <Link className="text-lg" href={"/dashboard/plantas"}> Plantas </Link>
+                    <Link className="text-lg transition-colors duration-200 hover:text-green-900" 
+                    href={"/dashboard/plantas"}
+                    >
+                     Plantas 
+                     </Link>
                 </div>
             </div>
             </div>
 
             <div className="flex flex-row items-end gap-4 pl-10 pb-10">
                 <BiLogOut size={30}/> 
-                <button className="text-lg" onClick={() => logout()}> Logout </button>
+                <button className="text-lg transition-colors duration-200 hover:text-green-900"
+                 onClick={() => logout()}
+                 > 
+                 Logout
+                 </button>
             </div>
         </div>
     )
