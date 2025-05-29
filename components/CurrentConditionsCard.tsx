@@ -1,18 +1,57 @@
-import { Thermometer, Droplets, Clock, Calendar } from "lucide-react"
+import { useEffect, useState } from "react";
+import { Thermometer, Droplets, Clock, Calendar } from "lucide-react";
 
 interface CurrentConditionsProps {
-  temperature?: string
-  soilHumidity?: string
-  lastIrrigation?: string
-  nextEvent?: string
+  nextEvent?: string;
 }
 
 export default function CurrentConditionsCard({
-  temperature = "24°C",
-  soilHumidity = "65%",
-  lastIrrigation = "Hoje, 08:30",
   nextEvent = "Amanhã, 14:00",
 }: CurrentConditionsProps) {
+  const [currentData, setCurrentData] = useState({
+    temperature: "--°C",
+    soilHumidity: "--%",
+    lastIrrigation: "--",
+    nextEvent: nextEvent,
+  });
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // 🌤️ Open-Meteo para temperatura atual
+        const weatherResponse = await fetch(
+          "https://api.open-meteo.com/v1/forecast?latitude=41.5454&longitude=-8.4265&current_weather=true"
+        );
+        const weatherData = await weatherResponse.json();
+        const temp = weatherData.current_weather.temperature;
+
+        // 🌱 Agromonitoring para umidade do solo
+        const apiKey = "SUA_CHAVE_API"; // 🔑 Insira sua chave
+        const polyId = "SEU_POLYID";    // 📐 Insira o ID do polígono
+        const soilResponse = await fetch(
+          `http://api.agromonitoring.com/agro/1.0/soil?polyid=${polyId}&appid=${apiKey}`
+        );
+        const soilData = await soilResponse.json();
+        const soilMoisture = (soilData.moisture * 100).toFixed(2); // Converter para %
+
+        // 🕒 Determinar última irrigação (simulação)
+        const lastIrrigationTime =
+          parseFloat(soilMoisture) < 30 ? "Hoje, 08:30" : "Ontem, 08:30";
+
+        setCurrentData({
+          temperature: `${temp}°C`,
+          soilHumidity: `${soilMoisture}%`,
+          lastIrrigation: lastIrrigationTime,
+          nextEvent: nextEvent,
+        });
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div className="space-y-4">
       {/* Temperatura */}
@@ -23,7 +62,7 @@ export default function CurrentConditionsCard({
           </div>
           <span className="text-black text-sm font-medium">Temperatura</span>
         </div>
-        <span className="text-black font-semibold">{temperature}</span>
+        <span className="text-black font-semibold">{currentData.temperature}</span>
       </div>
 
       {/* Umidade do Solo */}
@@ -34,7 +73,7 @@ export default function CurrentConditionsCard({
           </div>
           <span className="text-black text-sm font-medium">Umidade do Solo</span>
         </div>
-        <span className="text-black font-semibold">{soilHumidity}</span>
+        <span className="text-black font-semibold">{currentData.soilHumidity}</span>
       </div>
 
       {/* Última Irrigação */}
@@ -45,7 +84,7 @@ export default function CurrentConditionsCard({
           </div>
           <span className="text-black text-sm font-medium">Última Irrigação</span>
         </div>
-        <span className="text-black font-semibold">{lastIrrigation}</span>
+        <span className="text-black font-semibold">{currentData.lastIrrigation}</span>
       </div>
 
       {/* Próximo Evento */}
@@ -56,8 +95,8 @@ export default function CurrentConditionsCard({
           </div>
           <span className="text-black text-sm font-medium">Próximo Evento</span>
         </div>
-        <span className="text-black font-semibold">{nextEvent}</span>
+        <span className="text-black font-semibold">{currentData.nextEvent}</span>
       </div>
     </div>
-  )
+  );
 }

@@ -4,6 +4,7 @@ import CurrentConditionsCard from "@/components/CurrentConditionsCard";
 import { ProduçãoMensalChart } from "./charts/ProduçãoMensalChart";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { PieChartEspecies } from "./charts/PieChartEspecies";
 
 export default function Home() {
 
@@ -31,6 +32,14 @@ export default function Home() {
       }
   }
 
+  const especiesData = [
+    { especie: "Tomate", quantidade: 25 },
+    { especie: "Alface", quantidade: 18 },
+    { especie: "Cenoura", quantidade: 12 },
+    { especie: "Pimentão", quantidade: 8 },
+    { especie: "Couve", quantidade: 15 },
+  ]
+
   useEffect(() => {
     getPlantNumber();
     getSpeciesNumber()
@@ -39,7 +48,28 @@ export default function Home() {
   return (
     <div className="pt-8">
       <div className="p-4 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader>
+              <div className="text-lg pb-5 text-black font-semibold items-center">Produção Mensal</div>
+            </CardHeader>
+            <CardBody>
+              <ProduçãoMensalChart data={[
+                { month: "Jan", quantity: 12 },
+                { month: "Fev", quantity: 10 },
+                { month: "Mar", quantity: 22 },
+                { month: "Abr", quantity: 14 },
+                { month: "Mai", quantity: 34 },
+                { month: "Jun", quantity: 13 },
+                { month: "Jul", quantity: 9 },
+                { month: "Ago", quantity: 4 },
+                { month: "Set", quantity: 20 },
+                { month: "Out", quantity: 22 },
+                { month: "Nov", quantity: 23 },
+                { month: "Dez", quantity: 21 }]}/>
+            </CardBody>
+          </Card>
+                  <div className="grid grid-cols-1 lg:grid-rows-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
               <div className="text-sm font-medium text-black">NÚMERO TOTAL DE PLANTAS</div>
@@ -59,41 +89,11 @@ export default function Home() {
             </CardBody>
           </Card>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        </div>
+        <div>
           <Card>
-            <CardHeader>
-              <div className="text-lg text-black font-semibold">Condições Atuais</div>
-            </CardHeader>
-            <CardBody className="space-y-4 mt-10">
-              <div className="h-32 rounded-md">
-                <CurrentConditionsCard
-                temperature="24°C" // getTemp()
-                soilHumidity="65%" // getHum() ?
-                lastIrrigation="Hoje, 08:30" // getIrrigation()
-                nextEvent="Amanhã, 14:00" // getEvent() ?                 
-                /> 
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <div className="text-lg pb-5 text-black font-semibold items-center">Produção Mensal</div>
-            </CardHeader>
             <CardBody>
-              <ProduçãoMensalChart data={[
-                { month: "Jan", quantity: 12 },
-                { month: "Fev", quantity: 10 },
-                { month: "Mar", quantity: 22 },
-                { month: "Abr", quantity: 14 },
-                { month: "Mai", quantity: 34 },
-                { month: "Jun", quantity: 13 },
-                { month: "Jul", quantity: 9 },
-                { month: "Ago", quantity: 4 },
-                { month: "Set", quantity: 20 },
-                { month: "Out", quantity: 22 },
-                { month: "Nov", quantity: 23 },
-                { month: "Dez", quantity: 21 }]}/>
+              <PieChartEspecies data={especiesData} />
             </CardBody>
           </Card>
         </div>
