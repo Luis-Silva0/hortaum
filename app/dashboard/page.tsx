@@ -5,10 +5,28 @@ import { ProduçãoMensalChart } from "./charts/ProduçãoMensalChart";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
 export default function Home() {
 
   const [numeroTotal, setNumeroTotal] = useState(0);
   const [speciesNumber, setSpeciesNumber] = useState(0);
+  const [stats, setStats] = useState<{date: string, quantity: number}[]>([]);
+
+  const getSpeciesByMonth = async () => {
+    try {
+          const response = await axios.get("/api/stats");
+          const data = response.data.stats.map((stat: {numSpecies: number, date: string}) => {
+            const date = new Date(stat.date);
+            const dateString = months[date.getMonth()] + " " + date.getFullYear().toString();
+            return {quantity: stat.numSpecies, date: dateString}
+          })
+          setStats(data);
+            
+      } catch (error:any) {
+          console.log("Failed to get species by month", error.response.data.error);   
+      }
+  }
 
   const getPlantNumber = async () => {
     try {
@@ -33,7 +51,8 @@ export default function Home() {
 
   useEffect(() => {
     getPlantNumber();
-    getSpeciesNumber()
+    getSpeciesNumber();
+    getSpeciesByMonth();
   }, []);
 
   return (
@@ -81,19 +100,7 @@ export default function Home() {
               <div className="text-lg pb-5 text-black font-semibold items-center">Produção Mensal</div>
             </CardHeader>
             <CardBody>
-              <ProduçãoMensalChart data={[
-                { month: "Jan", quantity: 12 },
-                { month: "Fev", quantity: 10 },
-                { month: "Mar", quantity: 22 },
-                { month: "Abr", quantity: 14 },
-                { month: "Mai", quantity: 34 },
-                { month: "Jun", quantity: 13 },
-                { month: "Jul", quantity: 9 },
-                { month: "Ago", quantity: 4 },
-                { month: "Set", quantity: 20 },
-                { month: "Out", quantity: 22 },
-                { month: "Nov", quantity: 23 },
-                { month: "Dez", quantity: 21 }]}/>
+              <ProduçãoMensalChart data={stats}/>
             </CardBody>
           </Card>
         </div>

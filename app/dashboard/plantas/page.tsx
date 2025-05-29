@@ -37,11 +37,7 @@ const columns = [
 ];
 
 const initialFakeData = [
-  { id: "0", designation: "Tomate", scientific_name: "Solanum lycopersicum", species: "Tomate", n_specimens: 10, description: "It's a tomato" },
-  { id: "1", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 15, description: "It's lettuce" },
-  { id: "2", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 5, description: "It's lettuce" },
-  { id: "3", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 2, description: "It's lettuce" },
-  { id: "4", designation: "Alface", scientific_name: "Lactuca sativa", species: "Alface", n_specimens: 25, description: "It's lettuce" },
+  { id: "0", designation: "Tomate", scientific_name: "Solanum lycopersicum", species: "Tomate", n_specimens: 10, description: "" },
 ];
 
 // Adicionar ID para cada familia, para identificar cada uma, familia "Lactuca sativa" id = 0
@@ -53,6 +49,11 @@ export default function Plants() {
   const [data, setData] = useState(initialFakeData);
   const [loading, setLoading] = useState(false);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
+  const goBack = () => {
+    setPlantId("");
+    getPlants();
+  }
 
   const deletePlant = async (pId: number) => {
       try {
@@ -68,9 +69,8 @@ export default function Plants() {
     switch(columnKey) {
       case "actions":
         return (
-          <div className="flex flex-row justify-center gap-3 text-[#22c55e] px-4">
-            <button onClick={() => setPlantId(item._id)}> <FaEye size={25}/> </button>
-            <button> <MdModeEdit size={25}/> </button>
+          <div className="flex flex-row justify-center gap-3 text-[#4D789B] px-4">
+            <button onClick={() => setPlantId(item.id)}> <FaEye size={25}/> </button>
             <button> <FaRegTrashAlt size={25}
             onClick={() => deletePlant(item.id)} 
             />
@@ -80,8 +80,8 @@ export default function Plants() {
         );
       default:
         return (
-          <div className="relative flex items-center gap-2 py-4 text-[#4D789B] px-4 text-wrap"> 
-            {getKeyValue(item, columnKey)}
+          <div className="relative flex items-center gap-2 py-4 text-[#4D789B] px-4 line-clamp-4"> 
+            <p className="line-clamp-4"> {getKeyValue(item, columnKey)} </p>
           </div>
         );
     }
@@ -155,6 +155,7 @@ export default function Plants() {
             onSortChange={setSortDescriptor}
             removeWrapper
             isStriped
+            radius="none"
           >
             <TableHeader columns={columns}>
               {(column) => (
@@ -178,7 +179,7 @@ export default function Plants() {
           </Table>
         </div>
       ) : (
-        <AtributeList id={plantId}/>
+        <AtributeList id={plantId} back={goBack}/>
       )}
       <Modal isOpen={isOpen} size="5xl" onOpenChange={onOpenChange}>
         <ModalContent>

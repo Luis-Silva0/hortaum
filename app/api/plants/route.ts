@@ -7,15 +7,15 @@ dbConnect()
 
 export async function GET(request: NextRequest){
     try {
-        const reqBody = await request.json()
-        const plantId = reqBody
+        const params = new URL(request.url);
+        const plantId = params.searchParams.get("id");
 
         //check if user exists
-        const plant = await Plant.findById({_id: plantId})
+        const plant = await Plant.findOne({id: plantId}).select({"__v": 0});
 
-        console.log("Yay", Object.keys(plant.toObject()))
+        //console.log("Yay", Object.keys(plant.toObject()))
 
-        return plant;
+        return NextResponse.json({response: "Success", plant: plant});
 
     } catch (error: any) {
         return NextResponse.json({error: error.message}, {status: 500})
@@ -49,6 +49,21 @@ export async function DELETE(request: NextRequest){
         const data = reqBody;
 
         const plant = await Plant.deleteOne({id: data.id});
+        return NextResponse.json({response: "Success"});
+
+    } catch (error: any) {
+        return NextResponse.json({error: error.message}, {status: 500})
+
+    }
+}
+
+export async function PUT(request: NextRequest){
+    try {
+        const reqBody = await request.json()
+        const data = reqBody;
+        const update = {[data.data.key]: data.data.value};
+
+        const plant = await Plant.findOneAndUpdate({id: data.data.id}, {$set:update});
         return NextResponse.json({response: "Success"});
 
     } catch (error: any) {

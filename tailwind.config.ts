@@ -16,5 +16,7 @@ export default {
       },
     },
   },
-  plugins: [heroui()],
+  plugins: [
+    heroui(),
+  ],
 } satisfies Config;
