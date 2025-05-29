@@ -44,8 +44,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center" 
-    style={{ backgroundImage: "url('/Foto-Horta.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
+    <div className="flex min-h-screen items-center justify-center" style={{backgroundImage: `url('/Foto_Horta.png')`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
       <Card className="w-full max-w-md shadow-lg bg-gradient-to-b from-green-50 to-white p-4">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-2">
