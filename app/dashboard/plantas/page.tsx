@@ -68,7 +68,7 @@ export default function Plants() {
     switch(columnKey) {
       case "actions":
         return (
-          <div className="flex flex-row justify-center gap-3 text-[#4D789B] px-4">
+          <div className="flex flex-row justify-center gap-3 text-[#22c55e] px-4">
             <button onClick={() => setPlantId(item._id)}> <FaEye size={25}/> </button>
             <button> <MdModeEdit size={25}/> </button>
             <button> <FaRegTrashAlt size={25}
@@ -140,7 +140,7 @@ export default function Plants() {
                 }}
               />
               <Button
-                className="flex bg-[#19684a] rounded-lg text-white"
+                className="flex bg-[#22c55e] rounded-lg text-white"
                 size="lg"
                 onPress={onOpen}
               >  <FaPlus size={25}/>

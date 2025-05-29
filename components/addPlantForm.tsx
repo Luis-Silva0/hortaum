@@ -68,7 +68,7 @@ export default function AddPlantForm (props: any) {
                     value={formData.designation}
                     onChange={(e: any) => setFormData({...formData, designation: e.target.value})}
                     variant="bordered"
-                    classNames={{label: "!text-[#2A3F54]"}}
+                    classNames={{label: "!text-[#22c55e]"}}
                 />
                 <Input
                     isRequired
@@ -81,7 +81,7 @@ export default function AddPlantForm (props: any) {
                     value={formData.scientific_name}
                     onChange={(e: any) => setFormData({...formData, scientific_name: e.target.value})}
                     variant="bordered"
-                    classNames={{label: "!text-[#2A3F54]"}}
+                    classNames={{label: "!text-[#22c55e]"}}
                 />
                 {newSpecies ? (
                     <div className="w-full">
@@ -94,7 +94,7 @@ export default function AddPlantForm (props: any) {
                             value={formData.species}
                             onChange={(e: any) => setFormData({...formData, species: e.target.value})}
                             variant="bordered"
-                            classNames={{label: "!text-[#2A3F54]"}}
+                            classNames={{label: "!text-[#22c55e]"}}
                         />
                         <Button 
                             color="danger"
@@ -119,14 +119,14 @@ export default function AddPlantForm (props: any) {
                                 setFormData({ ...formData, species: selectedKey as string });
                             }}
                             variant="bordered"
-                            classNames={{label: "!text-[#2A3F54]", listbox: "text-black", trigger: "text-black"}}
+                            classNames={{label: "!text-[#22c55e]", listbox: "text-black", trigger: "text-black"}}
                         > 
                             {(species: {id: string, label: string}) => <SelectItem key={species.id} textValue={species.label}> {species.label} </SelectItem>}
                         </Select>
                         <Button 
                             variant="bordered"
                             onPress={() => setNewSpecies(true)}
-                            className="mt-2 text-[#4D789B] border-[#4D789B]"
+                            className="mt-2 text-[#22c55e] border-[#1a9648]"
                         > 
                             Adicionar uma espécie nova 
                         </Button>
@@ -141,7 +141,7 @@ export default function AddPlantForm (props: any) {
                     value={formData.n_specimens.toString()}
                     onChange={(e: any) => setFormData({...formData, n_specimens: e.target.valueAsNumber})}
                     variant="bordered"
-                    classNames={{label: "!text-[#2A3F54]"}}
+                    classNames={{label: "!text-[#22c55e]"}}
                 />
                 <Input
                     label="Descrição"
@@ -152,9 +152,9 @@ export default function AddPlantForm (props: any) {
                     value={formData.description}
                     onChange={(e: any) => setFormData({...formData, description: e.target.value})}
                     variant="bordered"
-                    classNames={{label: "!text-[#2A3F54]"}}
+                    classNames={{label: "!text-[#22c55e]"}}
                 />
-                {!loading ? (<Button type="submit" className="bg-[#2A3F54] text-white"> Adicionar </Button>) : (<p> A processar </p>)}
+                {!loading ? (<Button type="submit" className="bg-[#22c55e] text-white"> Adicionar </Button>) : (<p> A processar </p>)}
             </Form>
         </div>
     )
