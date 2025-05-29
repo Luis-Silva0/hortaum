@@ -58,7 +58,11 @@ export default function Sidebar () {
 
             <div className="flex flex-row items-end gap-4 pl-10 pb-10">
                 <BiLogOut size={30}/> 
-                <button className="text-lg" onClick={() => logout()}> Logout </button>
+                <button className="text-lg transition-colors duration-200 hover:text-green-900"
+                 onClick={() => logout()}
+                 > 
+                 Logout
+                 </button>
             </div>
         </div>
     )
