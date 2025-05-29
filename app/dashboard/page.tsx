@@ -1,14 +1,45 @@
 "use client"
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import CurrentConditionsCard from "@/components/CurrentConditionsCard";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { ProduçãoMensalChart } from "./charts/ProduçãoMensalChart";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
+const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+import { PieChartEspecies } from "./charts/PieChartEspecies";
 
 export default function Home() {
 
   const [numeroTotal, setNumeroTotal] = useState(0);
   const [speciesNumber, setSpeciesNumber] = useState(0);
+  const [stats, setStats] = useState<{date: string, quantity: number}[]>([]);
+  const [speciesStats, setSpeciesStats] = useState<{species: string, total_specimens: number}[]>([]);
+  const [delta, setDelta] = useState(0);
+
+  const getDistribution = async () => {
+    try {
+          const response = await axios.get("/api/plants/species/distribution");
+          setSpeciesStats(response.data.species);
+            
+      } catch (error:any) {
+          console.log("Failed to get species by month", error.response.data.error);   
+      }
+  }
+
+  const getSpeciesByMonth = async () => {
+    try {
+          const response = await axios.get("/api/stats");
+          const data = response.data.stats.map((stat: {numSpecies: number, date: string}) => {
+            const date = new Date(stat.date);
+            const dateString = months[date.getMonth()] + " " + date.getFullYear().toString();
+            return {quantity: stat.numSpecies, date: dateString}
+          })
+          setStats(data);
+            
+      } catch (error:any) {
+          console.log("Failed to get species by month", error.response.data.error);   
+      }
+  }
 
   const getPlantNumber = async () => {
     try {
@@ -33,13 +64,37 @@ export default function Home() {
 
   useEffect(() => {
     getPlantNumber();
-    getSpeciesNumber()
+    getSpeciesNumber();
+    getSpeciesByMonth();
+    getDistribution();
   }, []);
 
+  useEffect(() => {
+    if (stats.length != 0) {
+      const lastMonth = new Date().getMonth() - 1;
+      if (lastMonth == 11){
+        const n = stats.filter((stat) => stat.date == (months[lastMonth] + " " + (new Date().getFullYear() - 1).toString()))[0].quantity;
+        setDelta((speciesNumber/n)*100);
+      } else {
+        const n = stats.filter((stat) => stat.date == (months[lastMonth] + " " + new Date().getFullYear().toString()))[0].quantity;
+        setDelta((speciesNumber/n)*100);
+      }
+    }
+  }, [stats]);
+
   return (
-    <div className="pt-8">
+    <div className="pt-8 overflow-y-scroll">
       <div className="p-4 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader>
+              <div className="text-lg pb-5 text-black font-semibold items-center">Quantidade de Espécies por Mês</div>
+            </CardHeader>
+            <CardBody>
+              <ProduçãoMensalChart data={stats}/>
+            </CardBody>
+          </Card>
+                  <div className="grid grid-cols-1 lg:grid-rows-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
               <div className="text-sm font-medium text-black">NÚMERO TOTAL DE PLANTAS</div>
@@ -55,45 +110,20 @@ export default function Home() {
             </CardHeader>
             <CardBody>
               <div className="text-2xl text-black font-bold pb-2">{speciesNumber}</div>
-              <p className="text-xs text-black">Desde o último mês</p>
-            </CardBody>
-          </Card>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader>
-              <div className="text-lg text-black font-semibold">Condições Atuais</div>
-            </CardHeader>
-            <CardBody className="space-y-4 mt-10">
-              <div className="h-32 rounded-md">
-                <CurrentConditionsCard
-                temperature="24°C" // getTemp()
-                soilHumidity="65%" // getHum() ?
-                lastIrrigation="Hoje, 08:30" // getIrrigation()
-                nextEvent="Amanhã, 14:00" // getEvent() ?                 
-                /> 
+              <div className="text-xs text-black">{(delta > 0) ? (
+                <div className="flex flex-row text-[#22c55e] gap-1"> <IoIosArrowUp size={14}/> {delta}% Desde o último mês </div>
+              ) : ( (delta < 0) && 
+                <div className="flex flex-row text-[#ee4444] gap-1"> <IoIosArrowDown/> {delta}% Desde o último mês </div>
+              )} 
               </div>
             </CardBody>
           </Card>
-
+        </div>
+        </div>
+        <div>
           <Card>
-            <CardHeader>
-              <div className="text-lg pb-5 text-black font-semibold items-center">Produção Mensal</div>
-            </CardHeader>
             <CardBody>
-              <ProduçãoMensalChart data={[
-                { month: "Jan", quantity: 12 },
-                { month: "Fev", quantity: 10 },
-                { month: "Mar", quantity: 22 },
-                { month: "Abr", quantity: 14 },
-                { month: "Mai", quantity: 34 },
-                { month: "Jun", quantity: 13 },
-                { month: "Jul", quantity: 9 },
-                { month: "Ago", quantity: 4 },
-                { month: "Set", quantity: 20 },
-                { month: "Out", quantity: 22 },
-                { month: "Nov", quantity: 23 },
-                { month: "Dez", quantity: 21 }]}/>
+              <PieChartEspecies data={speciesStats} />
             </CardBody>
           </Card>
         </div>
@@ -101,37 +131,3 @@ export default function Home() {
     </div>
   )
 }
-
-function eachDayOfInterval({ start, end }: { start: Date; end: Date }): Date[] {
-  const days: Date[] = []
-  let current = new Date(start)
-  while (isBefore(current, end) || current.getTime() === end.getTime()) {
-    days.push(new Date(current))
-    current = addDays(current, 1)
-  }
-  return days
-}
-
-function interval(start: Date, end: Date): { start: Date; end: Date } {
-  return { start, end }
-}
-function isBefore(current: Date, end: Date) {
-  return current.getTime() < end.getTime();
-}
-function addDays(current: Date, days: number): Date {
-  const result = new Date(current)
-  result.setDate(result.getDate() + days)
-  return result
-}
-function startOfDay(date: Date): Date {
-  const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
-function formatRevalidate(date: Date): string {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
-

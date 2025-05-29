@@ -40,10 +40,10 @@ const PlantSchema = new mongoose.Schema({
   /*distribution_map: {
     type: String,
     default: "",
-  },
+  },*/
   kingdom: {
     type: String,
-    default: "Plant",
+    default: "Plantae",
   },
   division: {
     type: String,
@@ -64,7 +64,7 @@ const PlantSchema = new mongoose.Schema({
   genus: {
     type: String,
     default: "",
-  },*/
+  },
   species: {
     type: String,
     default: "",
@@ -95,12 +95,12 @@ const PlantSchema = new mongoose.Schema({
   },*/
   n_specimens: {
     type: Number,
-    default: "",
+    default: 0,
   },
-  /*place: {
+  place: {
     type: String,
     default: "",
-  },
+  },/*
   caracterization: {
     type: String,
     default: "",

@@ -8,7 +8,7 @@ function formatQuantity(quantity: number) {
 
 type ProduçãoMensalProps = {
     data: {
-        month: string;
+        date: string;
         quantity: number
     }[]
 }
@@ -20,7 +20,7 @@ export function ProduçãoMensalChart( {data} : ProduçãoMensalProps) {
         <ResponsiveContainer width="100%" minHeight={300}>
             <LineChart data={data}>
                 <CartesianGrid stroke="hsl(var(--muted))"/>
-                <XAxis dataKey="month" name="Month" />
+                <XAxis dataKey="date" name="Month/Year" padding={{left:40, right:50}}/>
                 <YAxis dataKey="quantity" name="Quantity" tickFormatter={tick => formatQuantity(tick)}
                     />
                 <Tooltip 

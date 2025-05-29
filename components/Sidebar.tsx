@@ -1,6 +1,7 @@
 "use client"
 
 import { PiLeafBold } from "react-icons/pi";
+import { Leaf } from "lucide-react"
 import { RiHome5Line } from "react-icons/ri";
 import { BiLogOut } from "react-icons/bi";
 import axios from "axios"
@@ -26,7 +27,7 @@ export default function Sidebar () {
         <div className="bg-[#22c55e] h-screen w-[10vw] min-w-[200px] flex-col justify-between md:flex hidden text-white pt-2">
             <div className="flex flex-col gap-40">
                 <div className="h-[5vh] flex items-center justify-center gap-4">
-                <PiLeafBold size={40}/>
+                <Leaf size={40}/>
                 <h1 className="text-xl"> 
                     HortUM 
                 </h1>
