@@ -121,7 +121,7 @@ export default function Plants() {
   return (
     <>
       {plantId === "" ? (
-        <div className="pt-12 flex flex-col gap-6 flex-1">
+        <div className="pt-12 flex flex-col gap-6 flex-1 overflow-y-scroll">
           <div className="flex flex-row items-center justify-between px-8">
             <h1 className="text-3xl text-black">Gestão de Plantas</h1>
             <div className="flex gap-4 items-center">
