@@ -95,12 +95,12 @@ const PlantSchema = new mongoose.Schema({
   },*/
   n_specimens: {
     type: Number,
-    default: "",
+    default: 0,
   },
-  /*place: {
+  place: {
     type: String,
     default: "",
-  },
+  },/*
   caracterization: {
     type: String,
     default: "",

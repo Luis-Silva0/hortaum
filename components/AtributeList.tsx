@@ -30,9 +30,10 @@ const columns = [
   { key:"class", label:"Classe"},
   { key:"family", label:"Família"},
   { key:"genus", label:"Género"},
+  { key:"place", label:"Talhão"},
 ];
 
-const customOrder = ["id", "designation", "scientific_name", "n_specimens", "species", "description", "kingdom", "division", "class", "order", "family", "genus"];
+const customOrder = ["id", "designation", "scientific_name", "n_specimens", "species", "description", "kingdom", "division", "class", "order", "family", "genus","place"];
 
 
 
