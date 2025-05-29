@@ -7,6 +7,7 @@ import clientPromise from "@/lib/mongodb"
 import { FiEdit } from 'react-icons/fi'
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import EditCard from "@/components/EditCard"
 /*
 async function getQuantity(createdAfter: Date | null, createdBefore: Date | null) {
   const client = await clientPromise
@@ -112,7 +113,7 @@ export default function Home() {
               variant="ghost"
               size="lg"
               className="p-0 h-auto text-base font-bold flex items-center text-black"
-              onClick={() => setEditingArea(true)}
+              onClick={() => setEditingVoluntarios(true)}
             >
                 <FiEdit /> Editar
             </Button>
@@ -178,6 +179,23 @@ export default function Home() {
             </CardContent>
           </Card>
         </div>
+        {/* Componentes de edição */}
+        <EditCard
+          title="Área Total"
+          currentValue={areaTotal}
+          unit="m²"
+          isOpen={editingArea}
+          onClose={() => setEditingArea(false)}
+          onSave={handleSaveArea}
+        />
+
+        <EditCard
+          title="Voluntários Ativos"
+          currentValue={voluntariosAtivos}
+          isOpen={editingVoluntarios}
+          onClose={() => setEditingVoluntarios(false)}
+          onSave={handleSaveVoluntarios}
+        />
       </div>
     </div>
   )
@@ -215,4 +233,3 @@ function formatRevalidate(date: Date): string {
   const day = String(date.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
 }
-

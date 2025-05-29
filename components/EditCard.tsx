@@ -44,26 +44,26 @@ export default function EditCard({ title, currentValue, unit = "", isOpen, onClo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-white text-black">
         <DialogHeader>
           <DialogTitle>Editar {title}</DialogTitle>
         </DialogHeader>
         <div className="py-4">
           <div className="flex items-center justify-center space-x-4">
-            <Button variant="outline" size="icon" onClick={handleDecrement} className="h-10 w-10 rounded-full">
+            <Button variant="outline" size="icon" onClick={handleDecrement} className="h-10 w-10 rounded-full text-white bg-[#2A3F54]">
               <Minus className="h-4 w-4" />
             </Button>
             <div className="flex items-center">
-              <Input type="text" value={value} onChange={handleChange} className="w-24 text-center text-lg font-bold" />
+              <Input type="text" value={value} onChange={handleChange} className="w-24 text-center text-lg font-bold text-white bg-[#2A3F54]" />
               {unit && <span className="ml-2 text-lg font-medium">{unit}</span>}
             </div>
-            <Button variant="outline" size="icon" onClick={handleIncrement} className="h-10 w-10 rounded-full">
+            <Button variant="outline" size="icon" onClick={handleIncrement} className="h-10 w-10 rounded-full text-white bg-[#2A3F54]">
               <Plus className="h-4 w-4" />
             </Button>
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={onClose} className="text-white bg-red-700] ">
             Cancelar
           </Button>
           <Button onClick={handleSave}>Salvar</Button>
