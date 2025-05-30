@@ -8,11 +8,17 @@ import axios from "axios";
 const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 import { PieChartEspecies } from "./charts/PieChartEspecies";
 
+interface SpeciesStats{
+  date: string, 
+  quantity: number, 
+  formattedDate: string
+}
+
 export default function Home() {
 
   const [numeroTotal, setNumeroTotal] = useState(0);
   const [speciesNumber, setSpeciesNumber] = useState(0);
-  const [stats, setStats] = useState<{date: string, quantity: number}[]>([]);
+  const [stats, setStats] = useState<SpeciesStats[]>([]);
   const [speciesStats, setSpeciesStats] = useState<{species: string, total_specimens: number}[]>([]);
   const [delta, setDelta] = useState(0);
 
@@ -32,8 +38,8 @@ export default function Home() {
           const data = response.data.stats.map((stat: {numSpecies: number, date: string}) => {
             const date = new Date(stat.date);
             const dateString = months[date.getMonth()] + " " + date.getFullYear().toString();
-            return {quantity: stat.numSpecies, date: dateString}
-          })
+            return {quantity: stat.numSpecies, formattedDate: dateString, date: stat.date}
+          }).sort((a: SpeciesStats, b: SpeciesStats) => Date.parse(a.date) - Date.parse(b.date))
           setStats(data);
             
       } catch (error:any) {
@@ -73,11 +79,11 @@ export default function Home() {
     if (stats.length != 0) {
       const lastMonth = new Date().getMonth() - 1;
       if (lastMonth == 11){
-        const n = stats.filter((stat) => stat.date == (months[lastMonth] + " " + (new Date().getFullYear() - 1).toString()))[0].quantity;
-        setDelta((speciesNumber/n)*100);
+        const n = stats.filter((stat) => stat.formattedDate == (months[lastMonth] + " " + (new Date().getFullYear() - 1).toString()))[0].quantity;
+        setDelta(((speciesNumber/n) - 1)*100);
       } else {
-        const n = stats.filter((stat) => stat.date == (months[lastMonth] + " " + new Date().getFullYear().toString()))[0].quantity;
-        setDelta((speciesNumber/n)*100);
+        const n = stats.filter((stat) => stat.formattedDate == (months[lastMonth] + " " + new Date().getFullYear().toString()))[0].quantity;
+        setDelta(((speciesNumber/n) - 1)*100);
       }
     }
   }, [stats]);
